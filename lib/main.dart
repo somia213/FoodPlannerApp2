@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// Your main app screen
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -69,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {
-              // This will now work correctly
               showSearch(context: context, delegate: CustomDelegate());
             },
           ),
