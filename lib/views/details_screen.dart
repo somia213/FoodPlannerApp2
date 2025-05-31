@@ -118,13 +118,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
+                 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        meal.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      ),
 
-                  Text(
-                    meal.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
+                      IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border) , alignment: AlignmentDirectional.topStart,)
+                    ],
                   ),
                   const SizedBox(height: 8),
 
@@ -146,8 +153,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                   const SizedBox(height: 8),
                   ...meal.ingredients
-                      .map((ingredient) => Text("- $ingredient", style: const TextStyle(fontSize: 16)))
-                      .toList(),
+                      .map((ingredient) => Text("- $ingredient", style: const TextStyle(fontSize: 16))),                      // .toList(),
                   const SizedBox(height: 24),
 
                    Text(
