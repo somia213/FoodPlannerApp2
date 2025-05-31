@@ -1,4 +1,5 @@
 import 'package:first_app/viewmodels/search_viewmodel.dart';
+import 'package:first_app/views/details_screen.dart';
 import 'package:first_app/widgets/food_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,19 +14,19 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late SearchViewModel viewModel;
 
- @override
-void initState() {
-  super.initState();
-  viewModel = Provider.of<SearchViewModel>(context, listen: false);
+  @override
+  void initState() {
+    super.initState();
+    viewModel = Provider.of<SearchViewModel>(context, listen: false);
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    viewModel.loadAllMeals();
-  });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.loadAllMeals();
+    });
 
-  viewModel.searchController.addListener(() {
-    viewModel.searchFood();
-  });
-}
+    viewModel.searchController.addListener(() {
+      viewModel.searchFood();
+    });
+  }
 
   @override
   void dispose() {
@@ -35,7 +36,7 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<SearchViewModel>(context); 
+    final viewModel = Provider.of<SearchViewModel>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +65,6 @@ void initState() {
               ),
             ),
           ),
-
           if (viewModel.isLoading)
             const CircularProgressIndicator()
           else if (viewModel.errorMessage != null)
@@ -80,7 +80,17 @@ void initState() {
                 itemCount: viewModel.meals.length,
                 itemBuilder: (context, index) {
                   final item = viewModel.meals[index];
-                  return FoodCard(food: item);
+                  return FoodCard(
+                    food: item,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailsScreen(mealId: item.id),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),

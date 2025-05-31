@@ -1,38 +1,3 @@
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:http/http.dart' as http;
-// import '../models/food_item.dart';
-
-
-// // // // Dummy data
-// // //   foodItems = [
-// // //     FoodItem(
-// // //       name: "Pizza",
-// // //       calories: 266.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Pizza",
-// // //     ),
-// // //     FoodItem(
-// // //       name: "Burger",
-// // //       calories: 295.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Burger",
-// // //     ),
-// // //     FoodItem(
-// // //       name: "Salad",
-// // //       calories: 152.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Salad",
-// // //     ),
-// // //     FoodItem(
-// // //       name: "Fries",
-// // //       calories: 312.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Fries",
-// // //     ),
-// // //   ];
-
-// // //   isLoading = false;
-// // //   notifyListeners();
-// // // }
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
