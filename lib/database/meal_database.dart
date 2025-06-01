@@ -46,4 +46,20 @@ class MealDatabase {
       )
      ''');
   }
+
+  Future<void> insertMeal(FoodItem meal) async{
+    final db = await instance.database;
+    await db.insert('favorites', {
+      'id':meal.id,
+       'name': meal.name,
+        'category': meal.category,
+        'area': meal.area,
+        'instructions': meal.instructions,
+        'thumbnail': meal.thumbnail,
+        'youtubeUrl': meal.youtubeUrl,
+        'ingredients': meal.ingredients.join(','),
+    },
+       conflictAlgorithm: ConflictAlgorithm.replace
+    );
+  }
 }
