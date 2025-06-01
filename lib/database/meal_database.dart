@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:first_app/models/food_item.dart';
@@ -62,4 +64,34 @@ class MealDatabase {
        conflictAlgorithm: ConflictAlgorithm.replace
     );
   }
+
+  Future<void> removeMeal(String id) async{
+    final db = await instance.database;
+    db.delete('favorites' , where: 'id = ?' , whereArgs: [id]);
+  }
+
+  Future<List<FoodItem>> getAllFavorites() async {
+    final db = await instance.database;
+    final result = await db.query('favorites');
+    return result.map((json) {
+      final ingredients = (json['ingredients'] as String).split(',');
+      return FoodItem(
+        id: json['id'] as String,
+        name: json['name'] as String,
+        category: json['category'] as String,
+        area: json['area'] as String,
+        instructions: json['instructions'] as String,
+        thumbnail: json['thumbnail'] as String,
+        youtubeUrl: json['youtubeUrl'] as String,
+        ingredients: ingredients,
+      );
+    }).toList();
+  }
+
+   Future<bool> isFavorite(String id) async {
+    final db = await instance.database;
+    final result = await db.query('favorites', where: 'id = ?', whereArgs: [id]);
+    return result.isNotEmpty;
+  }
 }
+
