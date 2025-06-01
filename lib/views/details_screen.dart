@@ -1,4 +1,5 @@
 import 'package:first_app/viewmodels/details_viewmodel.dart';
+import 'package:first_app/viewmodels/favorite_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -16,7 +17,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
   bool showVideo = false;
   bool videoError = false;
   YoutubePlayerController? _controller;
-
   late MealDetailsViewModel viewModel;
 
   @override
@@ -26,7 +26,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     viewModel = MealDetailsViewModel();
 
     viewModel.loadMealDetails(widget.mealId).then((_) {
-      final videoId = YoutubePlayer.convertUrlToId(viewModel.meal?.youtubeUrl ?? '');
+      final videoId =
+          YoutubePlayer.convertUrlToId(viewModel.meal?.youtubeUrl ?? '');
       if (videoId != null && videoId.isNotEmpty) {
         _controller = YoutubePlayerController(
           initialVideoId: videoId,
@@ -41,7 +42,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               });
             }
           });
-        setState(() {}); 
+        setState(() {});
       }
     });
   }
@@ -56,7 +57,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
     if (videoError) {
       return const SizedBox(
         height: 200,
-        child: Center(child: Text('Video cannot be played',style: TextStyle(color: Colors.red),)),
+        child: Center(
+            child: Text(
+          'Video cannot be played',
+          style: TextStyle(color: Colors.red),
+        )),
       );
     }
 
@@ -118,7 +123,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                 
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -129,14 +134,33 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           fontSize: 24,
                         ),
                       ),
-
-                      IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border) , alignment: AlignmentDirectional.topStart,)
+                      FutureBuilder<bool>(
+                        future: Provider.of<MealViewModel>(context)
+                            .isFavorite(meal.id),
+                        builder: (context, snapshot) {
+                          final isFav = snapshot.data ?? false;
+                          return IconButton(
+                            icon: Icon(
+                              isFav ? Icons.favorite : Icons.favorite_border,
+                              color: Colors.red,
+                            ),
+                            onPressed: () {
+                              Provider.of<MealViewModel>(context, listen: false)
+                                  .toggleFavorite(meal);
+                              setState(() {}); // refresh icon
+                              
+                            },
+                          );
+                        },
+                      ),
                     ],
                   ),
                   const SizedBox(height: 8),
 
-                  Text("Category: ${meal.category}", style: const TextStyle(fontSize: 16)),
-                  Text("Area: ${meal.area}", style: const TextStyle(fontSize: 16)),
+                  Text("Category: ${meal.category}",
+                      style: const TextStyle(fontSize: 16)),
+                  Text("Area: ${meal.area}",
+                      style: const TextStyle(fontSize: 16)),
                   const SizedBox(height: 16),
 
                   const Text(
@@ -152,11 +176,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   const SizedBox(height: 8),
-                  ...meal.ingredients
-                      .map((ingredient) => Text("- $ingredient", style: const TextStyle(fontSize: 16))),                      // .toList(),
+                  ...meal.ingredients.map((ingredient) => Text("- $ingredient",
+                      style: const TextStyle(fontSize: 16))), // .toList(),
                   const SizedBox(height: 24),
 
-                   Text(
+                  Text(
                     "Watch ${meal.name} video:",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
@@ -182,7 +206,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              const Icon(Icons.play_circle_fill, size: 64, color: Colors.white),
+                              const Icon(Icons.play_circle_fill,
+                                  size: 64, color: Colors.white),
                             ],
                           ),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 import '../models/food_item.dart';
 import '../repository/meal_repository.dart';
 
@@ -24,5 +25,5 @@ class MealViewModel extends ChangeNotifier {
 
   Future<bool> isFavorite(String id) async {
     return await _repo.isFavorite(id);
-  }
+ }
 }

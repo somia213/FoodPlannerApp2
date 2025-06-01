@@ -1,3 +1,4 @@
+import 'package:first_app/viewmodels/favorite_viewmodel.dart';
 import 'package:first_app/viewmodels/search_viewmodel.dart';
 import 'package:first_app/views/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => SearchViewModel()),
+        ChangeNotifierProvider(create: (_) => MealViewModel()),
       ],
       child: const MyApp(),
     ),
