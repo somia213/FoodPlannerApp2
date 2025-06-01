@@ -15,9 +15,9 @@ class MealDatabase {
   MealDatabase._init();
 
 //  file_path -> database file name
-  Future<Database> _initDB(String file_path) async {
-    final db_path = await getDatabasesPath();
-    final path = join(db_path, file_path);
+  Future<Database> _initDB(String filePath) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, filePath);
 
     return await openDatabase(
       path,
