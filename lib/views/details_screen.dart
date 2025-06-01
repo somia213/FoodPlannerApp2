@@ -6,8 +6,10 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String mealId;
+  final bool fromFavorites;
 
-  const DetailsScreen({super.key, required this.mealId});
+  const DetailsScreen(
+      {super.key, required this.mealId, this.fromFavorites = false});
 
   @override
   State<DetailsScreen> createState() => _DetailsScreenState();
@@ -25,7 +27,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     viewModel = MealDetailsViewModel();
 
-    viewModel.loadMealDetails(widget.mealId).then((_) {
+  viewModel.loadMealDetails(widget.mealId, fromFavorites: widget.fromFavorites).then((_) {
       final videoId =
           YoutubePlayer.convertUrlToId(viewModel.meal?.youtubeUrl ?? '');
       if (videoId != null && videoId.isNotEmpty) {
@@ -148,7 +150,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               Provider.of<MealViewModel>(context, listen: false)
                                   .toggleFavorite(meal);
                               setState(() {}); // refresh icon
-                              
                             },
                           );
                         },

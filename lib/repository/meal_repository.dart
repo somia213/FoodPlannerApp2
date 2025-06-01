@@ -11,5 +11,6 @@ class MealRepository{
   Future<void> removeFromFavorites(String id) => _db.removeMeal(id);
   Future<List<FoodItem>> getFavorites() => _db.getAllFavorites();
   Future<bool> isFavorite(String id) => _db.isFavorite(id);
-
-}
+  Future<FoodItem?> getMealById(String id) => _db.getMealById(id);
+  
+  }

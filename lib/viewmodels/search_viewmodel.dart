@@ -17,7 +17,8 @@ class SearchViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final url = Uri.parse('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      final url =
+          Uri.parse('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -57,7 +58,9 @@ class SearchViewModel extends ChangeNotifier {
     errorMessage = null;
     notifyListeners();
 
-    meals = _allMeals.where((meal) => meal.name.toLowerCase().startsWith(searchItem)).toList();
+    meals = _allMeals
+        .where((meal) => meal.name.toLowerCase().startsWith(searchItem))
+        .toList();
 
     if (meals.isEmpty) {
       errorMessage = "No meals found.";
@@ -65,5 +68,11 @@ class SearchViewModel extends ChangeNotifier {
 
     isLoading = false;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 }

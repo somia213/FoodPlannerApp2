@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 class FoodItem {
   final String id;
@@ -40,5 +41,43 @@ class FoodItem {
       youtubeUrl: json['strYoutube'] ?? '',
       ingredients: ingredients,
     );
+  }
+
+  factory FoodItem.fromMap(Map<String, dynamic> map) {
+    List<String> ingredients = [];
+
+    if (map['ingredients'] != null && map['ingredients'] is String) {
+      try {
+        final decoded = jsonDecode(map['ingredients']) as List<dynamic>;
+        ingredients = decoded.map((e) => e.toString()).toList();
+      } catch (_) {
+        ingredients = map['ingredients'].toString().split(',');
+      }
+    }
+
+    return FoodItem(
+      id: map['id'] ?? 'Loading',
+      name: map['name'] ?? 'Loading',
+      category: map['category'] ?? 'Unknown',
+      area: map['area'] ?? 'Unknown',
+      instructions: map['instructions'] ?? 'No instructions available.',
+      thumbnail: map['thumbnail'] ??
+          'https://media.istockphoto.com/id/1162577265/vector/loading-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=s3AuEATjZppJS1haHJwdK3VdeBwzZw7VpYacstP4zKI=',
+      youtubeUrl: map['youtubeUrl'] ?? '',
+      ingredients: ingredients,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'category': category,
+      'area': area,
+      'instructions': instructions,
+      'thumbnail': thumbnail,
+      'youtubeUrl': youtubeUrl,
+      'ingredients': jsonEncode(ingredients), 
+    };
   }
 }

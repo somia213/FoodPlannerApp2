@@ -29,12 +29,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   @override
-  void dispose() {
-    viewModel.searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<SearchViewModel>(context);
 
@@ -86,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => DetailsScreen(mealId: item.id),
+                          builder: (_) => DetailsScreen(mealId: item.id, fromFavorites: false),
                         ),
                       );
                     },

@@ -32,40 +32,43 @@ class MealDatabase {
     return _database!;
   }
 
-  Future _createDB(Database db , int version ) async {
-    await db.execute(''' 
+  Future _createDB(Database db, int version) async {
+    await db.execute('''
      CREATE TABLE favorites (
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        category TEXT,
-        area TEXT,
-        instructions TEXT,
-        thumbnail TEXT,
-        youtubeUrl TEXT,
-        ingredients TEXT
-      )
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  category TEXT,
+  area TEXT,
+  instructions TEXT,
+  thumbnail TEXT,
+  youtubeUrl TEXT,
+  ingredients TEXT,
+  localImagePath TEXT
+)
+
      ''');
   }
 
-  Future<void> insertMeal(FoodItem meal) async{
+  Future<void> insertMeal(FoodItem meal) async {
     final db = await instance.database;
-    await db.insert('favorites', {
-      'id':meal.id,
-       'name': meal.name,
-        'category': meal.category,
-        'area': meal.area,
-        'instructions': meal.instructions,
-        'thumbnail': meal.thumbnail,
-        'youtubeUrl': meal.youtubeUrl,
-        'ingredients': meal.ingredients.join(','),
-    },
-       conflictAlgorithm: ConflictAlgorithm.replace
-    );
+    await db.insert(
+        'favorites',
+        {
+          'id': meal.id,
+          'name': meal.name,
+          'category': meal.category,
+          'area': meal.area,
+          'instructions': meal.instructions,
+          'thumbnail': meal.thumbnail,
+          'youtubeUrl': meal.youtubeUrl,
+          'ingredients': meal.ingredients.join(','),
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> removeMeal(String id) async{
+  Future<void> removeMeal(String id) async {
     final db = await instance.database;
-    db.delete('favorites' , where: 'id = ?' , whereArgs: [id]);
+    db.delete('favorites', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<List<FoodItem>> getAllFavorites() async {
@@ -86,10 +89,25 @@ class MealDatabase {
     }).toList();
   }
 
-   Future<bool> isFavorite(String id) async {
+  Future<bool> isFavorite(String id) async {
     final db = await instance.database;
-    final result = await db.query('favorites', where: 'id = ?', whereArgs: [id]);
+    final result =
+        await db.query('favorites', where: 'id = ?', whereArgs: [id]);
     return result.isNotEmpty;
   }
-}
 
+  Future<FoodItem?> getMealById(String id) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      'favorites',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return FoodItem.fromMap(maps.first);
+    } else {
+      return null;
+    }
+  }
+}
