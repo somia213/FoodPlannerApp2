@@ -3,14 +3,8 @@ import 'package:path/path.dart';
 import 'package:first_app/models/food_item.dart';
 
 class MealDatabase {
-// One shared instance of MealDatabase is used across the entire app.
-// A private constructor stops other classes from creating new objects.
-// Use .instance to open, update, or delete — no need to create again.
 
   static final MealDatabase instance = MealDatabase._init();
-// instance is like the controller or manager — it gives you access to the database and controls when to open or close it.
-// _database is the actual database connection that handles the real work like inserting, updating, deleting, and querying data.
-
   static Database? _database;
   MealDatabase._init();
 

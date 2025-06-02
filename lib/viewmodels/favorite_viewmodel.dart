@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/food_item.dart';
 import '../repository/meal_repository.dart';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
-
 
 class MealViewModel extends ChangeNotifier {
   final _repo = MealRepository();
