@@ -40,7 +40,7 @@ class MealDetailsViewModel extends ChangeNotifier {
         }
       }
     } catch (e) {
-      errorMessage = 'Failed to load meal details. ${e.toString()}';
+      errorMessage = 'Failed to load meal details.';
       meal = null;
     }
 

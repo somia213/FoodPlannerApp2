@@ -8,7 +8,6 @@ class MealDatabase {
   static Database? _database;
   MealDatabase._init();
 
-//  file_path -> database file name
   Future<Database> _initDB(String filePath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);

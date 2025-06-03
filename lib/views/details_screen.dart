@@ -1,3 +1,4 @@
+import 'package:alert_dialog/alert_dialog.dart';
 import 'package:first_app/viewmodels/details_viewmodel.dart';
 import 'package:first_app/viewmodels/favorite_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
     viewModel = MealDetailsViewModel();
 
-  viewModel.loadMealDetails(widget.mealId, fromFavorites: widget.fromFavorites).then((_) {
+    viewModel
+        .loadMealDetails(widget.mealId, fromFavorites: widget.fromFavorites)
+        .then((_) {
       final videoId =
           YoutubePlayer.convertUrlToId(viewModel.meal?.youtubeUrl ?? '');
       if (videoId != null && videoId.isNotEmpty) {
@@ -93,9 +96,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
           }
 
           if (vm.errorMessage != null) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Meal Details')),
-              body: Center(child: Text(vm.errorMessage!)),
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              alert(
+                context,
+                title: const Text('Error'),
+                content: Text(vm.errorMessage!),
+                textOK: const Text('Back'),
+              ).then((_) {
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context); 
+              });
+            });
+
+            return const Scaffold(
+              body: Center(
+                  child:
+                      CircularProgressIndicator()), 
             );
           }
 
@@ -121,9 +137,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         height: 200,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/loading.jpg',
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          );
+                        },
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 16),
 
                   Row(
@@ -149,7 +174,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             onPressed: () {
                               Provider.of<MealViewModel>(context, listen: false)
                                   .toggleFavorite(meal);
-                              setState(() {}); // refresh icon
+                              setState(() {}); 
                             },
                           );
                         },
@@ -178,7 +203,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   ),
                   const SizedBox(height: 8),
                   ...meal.ingredients.map((ingredient) => Text("- $ingredient",
-                      style: const TextStyle(fontSize: 16))), // .toList(),
+                      style: const TextStyle(fontSize: 16))), 
                   const SizedBox(height: 24),
 
                   Text(
@@ -200,8 +225,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  'https://www.shutterstock.com/image-vector/watch-now-green-duo-color-260nw-2328079169.jpg',
+                                child: Image.asset(
+                                  'assets/images/watch-now.webp',
                                   height: 200,
                                   width: double.infinity,
                                   fit: BoxFit.cover,

@@ -3,6 +3,8 @@ import 'package:first_app/views/details_screen.dart';
 import 'package:first_app/widgets/food_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:alert_dialog/alert_dialog.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -14,18 +16,52 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late SearchViewModel viewModel;
 
+  late final Connectivity _connectivity;
+  late final Stream<ConnectivityResult> _connectivityStream;
+
   @override
   void initState() {
     super.initState();
     viewModel = Provider.of<SearchViewModel>(context, listen: false);
+    _connectivity = Connectivity();
+    _connectivityStream = _connectivity.onConnectivityChanged;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      viewModel.loadAllMeals();
+    _connectivityStream.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        _showNoConnectionDialog();
+      }
+    });
+
+    void showErrorDialog(String message) {
+      alert(
+        context,
+        title: const Text('Error'),
+        content: Text(message),
+        textOK: const Text('Retry'),
+      ).then((_) {
+        viewModel.loadAllMeals();
+      });
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool success = await viewModel.loadAllMeals();
+      if (!success && mounted) {
+        showErrorDialog(viewModel.errorMessage ?? 'Something went wrong');
+      }
     });
 
     viewModel.searchController.addListener(() {
       viewModel.searchFood();
     });
+  }
+
+  void _showNoConnectionDialog() {
+    alert(
+      context,
+      title: const Text('No Internet'),
+      content: const Text('Please check your connection and try again.'),
+      textOK: const Text('Retry'),
+    );
   }
 
   @override
@@ -80,7 +116,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => DetailsScreen(mealId: item.id, fromFavorites: false),
+                          builder: (_) => DetailsScreen(
+                              mealId: item.id, fromFavorites: false),
                         ),
                       );
                     },

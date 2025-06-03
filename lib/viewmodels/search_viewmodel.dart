@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/food_item.dart';
@@ -11,7 +12,7 @@ class SearchViewModel extends ChangeNotifier {
 
   List<FoodItem> _allMeals = [];
 
-  Future<void> loadAllMeals() async {
+  Future<bool> loadAllMeals() async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
@@ -33,15 +34,22 @@ class SearchViewModel extends ChangeNotifier {
           _allMeals = mealsJson.map((json) => FoodItem.fromJson(json)).toList();
           meals = List.from(_allMeals);
         }
+        return true;
       } else {
         errorMessage = 'Error: ${response.statusCode}';
+        return false;
       }
     } catch (e) {
-      errorMessage = 'Failed to load data. ${e.toString()}';
+      if (e is SocketException) {
+        errorMessage = 'No internet connection.';
+      } else {
+        errorMessage = 'Something went wrong.';
+      }
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
-
-    isLoading = false;
-    notifyListeners();
   }
 
   Future<void> searchFood() async {
