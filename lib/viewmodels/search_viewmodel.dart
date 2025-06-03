@@ -1,39 +1,5 @@
-// import 'dart:convert';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
-// import 'package:http/http.dart' as http;
-// import '../models/food_item.dart';
-
-
-// // // // Dummy data
-// // //   foodItems = [
-// // //     FoodItem(
-// // //       name: "Pizza",
-// // //       calories: 266.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Pizza",
-// // //     ),
-// // //     FoodItem(
-// // //       name: "Burger",
-// // //       calories: 295.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Burger",
-// // //     ),
-// // //     FoodItem(
-// // //       name: "Salad",
-// // //       calories: 152.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Salad",
-// // //     ),
-// // //     FoodItem(
-// // //       name: "Fries",
-// // //       calories: 312.0,
-// // //       imageUrl: "https://via.placeholder.com/150?text=Fries",
-// // //     ),
-// // //   ];
-
-// // //   isLoading = false;
-// // //   notifyListeners();
-// // // }
-
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../models/food_item.dart';
@@ -46,13 +12,14 @@ class SearchViewModel extends ChangeNotifier {
 
   List<FoodItem> _allMeals = [];
 
-  Future<void> loadAllMeals() async {
+  Future<bool> loadAllMeals() async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
     try {
-      final url = Uri.parse('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+      final url =
+          Uri.parse('https://www.themealdb.com/api/json/v1/1/search.php?s=');
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -67,15 +34,22 @@ class SearchViewModel extends ChangeNotifier {
           _allMeals = mealsJson.map((json) => FoodItem.fromJson(json)).toList();
           meals = List.from(_allMeals);
         }
+        return true;
       } else {
         errorMessage = 'Error: ${response.statusCode}';
+        return false;
       }
     } catch (e) {
-      errorMessage = 'Failed to load data. ${e.toString()}';
+      if (e is SocketException) {
+        errorMessage = 'No internet connection.';
+      } else {
+        errorMessage = 'Something went wrong.';
+      }
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
-
-    isLoading = false;
-    notifyListeners();
   }
 
   Future<void> searchFood() async {
@@ -92,7 +66,9 @@ class SearchViewModel extends ChangeNotifier {
     errorMessage = null;
     notifyListeners();
 
-    meals = _allMeals.where((meal) => meal.name.toLowerCase().startsWith(searchItem)).toList();
+    meals = _allMeals
+        .where((meal) => meal.name.toLowerCase().startsWith(searchItem))
+        .toList();
 
     if (meals.isEmpty) {
       errorMessage = "No meals found.";
@@ -100,5 +76,11 @@ class SearchViewModel extends ChangeNotifier {
 
     isLoading = false;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 }
