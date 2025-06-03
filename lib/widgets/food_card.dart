@@ -29,14 +29,14 @@ class FoodCard extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: FadeInImage.assetNetwork(
-                  placeholder: 'images/loading.jpg',
+                  placeholder: 'assets/images/loading.jpg',
                   image: food.thumbnail,
                   height: 60,
                   width: 60,
                   fit: BoxFit.cover,
                   imageErrorBuilder: (context, error, stackTrace) {
                     return Image.asset(
-                      'images/loading.jpg',
+                      'assets/images/loading.jpg',
                       height: 60,
                       width: 60,
                       fit: BoxFit.cover,
