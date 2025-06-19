@@ -10,7 +10,7 @@ class FoodItem {
   final String youtubeUrl;
   final List<String> ingredients;
 
-  FoodItem({
+  const FoodItem({
     required this.id,
     required this.name,
     required this.category,
@@ -22,7 +22,8 @@ class FoodItem {
   });
 
   factory FoodItem.fromJson(Map<String, dynamic> json) {
-    List<String> ingredients = [];
+    final List<String> ingredients = [];
+
     for (int i = 1; i <= 20; i++) {
       final ingredient = json['strIngredient$i'];
       if (ingredient != null && ingredient.toString().trim().isNotEmpty) {
@@ -37,7 +38,7 @@ class FoodItem {
       area: json['strArea'] ?? 'Unknown',
       instructions: json['strInstructions'] ?? 'No instructions available.',
       thumbnail: json['strMealThumb'] ??
-          'https://media.istockphoto.com/id/1162577265/vector/loading-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=s3AuEATjZppJS1haHJwdK3VdeBwzZw7VpYacstP4zKI=',
+          'https://via.placeholder.com/150', 
       youtubeUrl: json['strYoutube'] ?? '',
       ingredients: ingredients,
     );
@@ -46,13 +47,18 @@ class FoodItem {
   factory FoodItem.fromMap(Map<String, dynamic> map) {
     List<String> ingredients = [];
 
-    if (map['ingredients'] != null && map['ingredients'] is String) {
+    final data = map['ingredients'];
+    if (data is String) {
       try {
-        final decoded = jsonDecode(map['ingredients']) as List<dynamic>;
-        ingredients = decoded.map((e) => e.toString()).toList();
+        final decoded = jsonDecode(data);
+        if (decoded is List) {
+          ingredients = decoded.map((e) => e.toString()).toList();
+        }
       } catch (_) {
-        ingredients = map['ingredients'].toString().split(',');
+        ingredients = data.split(',').map((e) => e.trim()).toList();
       }
+    } else if (data is List) {
+      ingredients = data.map((e) => e.toString()).toList();
     }
 
     return FoodItem(
@@ -62,7 +68,7 @@ class FoodItem {
       area: map['area'] ?? 'Unknown',
       instructions: map['instructions'] ?? 'No instructions available.',
       thumbnail: map['thumbnail'] ??
-          'https://media.istockphoto.com/id/1162577265/vector/loading-icon-isolated-on-white-background.jpg?s=612x612&w=0&k=20&c=s3AuEATjZppJS1haHJwdK3VdeBwzZw7VpYacstP4zKI=',
+          'https://via.placeholder.com/150',
       youtubeUrl: map['youtubeUrl'] ?? '',
       ingredients: ingredients,
     );
@@ -77,7 +83,7 @@ class FoodItem {
       'instructions': instructions,
       'thumbnail': thumbnail,
       'youtubeUrl': youtubeUrl,
-      'ingredients': jsonEncode(ingredients), 
+      'ingredients': jsonEncode(ingredients),
     };
   }
 }

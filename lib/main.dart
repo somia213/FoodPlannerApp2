@@ -25,7 +25,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'First App',
-      theme: ThemeData(primarySwatch: Colors.green),
       home: const SplashView(),
       onGenerateRoute: (settings) {
         if (settings.name == '/details') {

@@ -119,8 +119,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text(meal.name),
-              backgroundColor: Colors.green,
+              iconTheme: const IconThemeData(color: Colors.white),
+              title: Text(meal.name , style: TextStyle(color: Colors.white),),
+              backgroundColor: Color(0xFF033D05),
             ),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16),

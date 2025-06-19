@@ -29,8 +29,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text('Your Favorites'),
-            backgroundColor: Colors.green,
+             iconTheme: const IconThemeData(color: Colors.white),
+            title: const Text('Your Favorites' , style: TextStyle(color: Colors.white),),
+            backgroundColor: Color(0xFF033D05),
           ),
           body: favorites.isEmpty
               ? const Center(child: Text("No favorites yet! 💔"))

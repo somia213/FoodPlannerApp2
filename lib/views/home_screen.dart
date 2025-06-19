@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.green,
+        selectedItemColor: const Color(0xFF033D05),
         onTap: _onItemTapped,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
