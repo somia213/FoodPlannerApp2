@@ -42,4 +42,6 @@
 ![Favourite 5](https://github.com/user-attachments/assets/99f73af7-95f6-43d7-8766-e83e13ef5260)
 
 ---
+### 📶 Internet Connectivity
+![Image](https://github.com/user-attachments/assets/caf2edc6-148a-4679-80d7-b93c19574eda)
 
