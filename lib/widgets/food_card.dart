@@ -28,18 +28,23 @@ class FoodCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  food.thumbnail,
+                child: FadeInImage.assetNetwork(
+                  placeholder: 'assets/images/loading.jpg',
+                  image: food.thumbnail,
                   height: 60,
                   width: 60,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.fastfood, size: 60);
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      'assets/images/loading.jpg',
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    );
                   },
                 ),
               ),
               const SizedBox(width: 16),
-
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,7 +64,6 @@ class FoodCard extends StatelessWidget {
                   ],
                 ),
               ),
-
               const Icon(Icons.chevron_right),
             ],
           ),
