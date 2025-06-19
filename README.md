@@ -1,16 +1,18 @@
-# first_app
+🍽️ Meal Finder App
+A Flutter application built using the MVVM (Model-View-ViewModel) architecture. This app allows users to search for meals, view detailed information, save favorites to local storage using SQLite, and ensures seamless experience by checking internet connectivity.
 
-A new Flutter project.
+📱 Features
+🔍 Search Meals: Find meals by name or keyword from an API.
 
-## Getting Started
+📄 Meal Details: View full information including ingredients and instructions.
 
-This project is a starting point for a Flutter application.
+💾 Local Storage: Save your favorite meals offline using SQLite.
 
-A few resources to get you started if this is your first Flutter project:
+🌐 Connectivity Aware: Handles online/offline states gracefully.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+💡 MVVM Architecture: Clean and scalable code structure following MVVM pattern.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+📸 App Screenshots
+
+
+
